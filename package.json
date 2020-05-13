@@ -6,7 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec babel-node server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "init-data": "nodemon --exec babel-node dev-data/index.js  --import",
+    "delete-data": "nodemon --exec babel-node dev-data/index.js  --delete"
   },
   "author": "",
   "license": "ISC",
