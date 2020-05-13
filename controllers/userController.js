@@ -24,8 +24,19 @@ const getAllUsers = async (req, res) => {
     resErr(err, res);
   }
 };
-const getUser = (req, res) => {
-  tempResponse(res);
+const getUserById = async (req, res) => {
+  try {
+    // const user = await userModel.findOne({ _id: req.params.id })
+    const user = await userModel.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+      }
+    });
+  } catch (err) {
+    resErr(err, res);
+  }
 };
 const createUser = (req, res) => {
   tempResponse(res);
@@ -38,7 +49,7 @@ const deleteUser = (req, res) => {
 };
 export default {
   getAllUsers,
-  getUser,
+  getUserById,
   createUser,
   updateUser,
   deleteUser,
