@@ -35,7 +35,7 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const newUser = await userModel.create(req.body);
-    res.status(200).json({
+    res.status(201).json({
       status: 'success',
       data: {
         user: newUser,
@@ -45,11 +45,32 @@ const createUser = async (req, res) => {
     resErr(err, res);
   }
 };
-const updateUserById = (req, res) => {
-  // practice
+const updateUserById = async (req, res) => {
+  try {
+    const user = await userModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+      }
+    });
+  } catch (err) {
+    resErr(err, res);
+  }
 };
-const deleteUserById = (req, res) => {
-  // practice
+const deleteUserById = async (req, res) => {
+  try {
+    await userModel.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  } catch (err) {
+    resErr(err, res);
+  }
 };
 export default {
   getAllUsers,
