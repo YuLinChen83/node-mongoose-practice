@@ -1,11 +1,28 @@
+import userModel from './../models/userModel';
 const tempResponse = res => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined!'
   });
 }
-const getAllUsers = (req, res) => {
-  tempResponse(res);
+const resErr = (err, res) => {
+  res.status(404).json({
+    status: 'fail',
+    message: err
+  });
+}
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await userModel.find();
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+      }
+    });
+  } catch (err) {
+    resErr(err, res);
+  }
 };
 const getUser = (req, res) => {
   tempResponse(res);
