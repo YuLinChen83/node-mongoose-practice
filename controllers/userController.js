@@ -1,10 +1,5 @@
 import userModel from './../models/userModel';
-const tempResponse = res => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-}
+
 const resErr = (err, res) => {
   res.status(404).json({
     status: 'fail',
@@ -39,12 +34,6 @@ const getUserById = async (req, res) => {
 };
 const createUser = async (req, res) => {
   try {
-    // const newUser = new userModel(req.body);
-    // newUser.save((err) => {
-    //   if (err) return handleError(err);
-    //   // saved!
-    // })
-
     const newUser = await userModel.create(req.body);
     res.status(200).json({
       status: 'success',
@@ -56,16 +45,16 @@ const createUser = async (req, res) => {
     resErr(err, res);
   }
 };
-const updateUser = (req, res) => {
-  tempResponse(res);
+const updateUserById = (req, res) => {
+  // practice
 };
-const deleteUser = (req, res) => {
-  tempResponse(res);
+const deleteUserById = (req, res) => {
+  // practice
 };
 export default {
   getAllUsers,
   getUserById,
   createUser,
-  updateUser,
-  deleteUser,
+  updateUserById,
+  deleteUserById,
 };
