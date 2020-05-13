@@ -5,6 +5,8 @@ const userSchema = new Schema({
     type: String,
     unique: true,
     required: true,
+    maxlength: [20, '帳號最多20個字'],
+    minlength: [5, '帳號最少5個字']
   },
   password: {
     type: String,
