@@ -9,7 +9,7 @@ const resErr = (err, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const queryObject = { ...req.query };
-    const excludedFields = ['sort'];
+    const excludedFields = ['sort', 'fields'];
     excludedFields.forEach(el => delete queryObject[el]);
 
     // 1. Filtering
@@ -23,6 +23,14 @@ const getAllUsers = async (req, res) => {
       query = query.sort(sortByStr);
     } else {
       query = query.sort('-createAt');
+    }
+
+    // 3. Field limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.replace(',', ' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
     }
 
     const users = await query;
