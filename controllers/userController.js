@@ -9,7 +9,7 @@ const resErr = (err, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const queryObject = { ...req.query };
-    const excludedFields = ['sort', 'fields'];
+    const excludedFields = ['sort', 'fields', 'page', 'limit'];
     excludedFields.forEach(el => delete queryObject[el]);
 
     // 1. Filtering
@@ -32,6 +32,16 @@ const getAllUsers = async (req, res) => {
     } else {
       query = query.select('-__v');
     }
+
+    // 4. Pagination
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 10;
+    const skip = (page - 1) * limit;
+    if (req.query.page) {
+      const numUsers = await User.countDocuments();
+      if (skip >= numUsers) throw new Error('The page is not exist.')
+    }
+    query = query.skip(skip).limit(limit);
 
     const users = await query;
 
