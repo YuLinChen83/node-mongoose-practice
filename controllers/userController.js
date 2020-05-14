@@ -8,7 +8,12 @@ const resErr = (err, res) => {
 }
 const getAllUsers = async (req, res) => {
   try {
-    const user = await userModel.find();
+    // /api/v1/users?account=tiff&age[gte]=25
+    // console.log(req.query);   // { account: 'tiff', age: { gte: '25' } }
+    let queryStr = JSON.stringify(req.query);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    
+    const user = await userModel.find(JSON.parse(queryStr));
     res.status(200).json({
       status: 'success',
       data: {
