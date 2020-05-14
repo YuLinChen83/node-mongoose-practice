@@ -3,6 +3,8 @@ import userController from './../controllers/userController';
 
 const router = express.Router();
 
+router.route('/top-3-youngest').get(userController.aliasTopYoungs, userController.getAllUsers);
+
 router
   .route('/')
   .get(userController.getAllUsers)

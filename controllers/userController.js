@@ -6,6 +6,13 @@ const resErr = (err, res) => {
     message: err
   });
 }
+const aliasTopYoungs = (req, res, next) => {
+  req.query.age = { "gte": 0 };
+  req.query.limit = 3;
+  req.query.sort = 'age';
+  req.query.fields = 'name,age';
+  next();
+}
 const getAllUsers = async (req, res) => {
   try {
     const queryObject = { ...req.query };
@@ -109,6 +116,7 @@ const deleteUserById = async (req, res) => {
   }
 };
 export default {
+  aliasTopYoungs,
   getAllUsers,
   getUserById,
   createUser,
