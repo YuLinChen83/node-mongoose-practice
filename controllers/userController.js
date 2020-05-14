@@ -1,4 +1,4 @@
-import userModel from './../models/userModel';
+import User from './../models/userModel';
 
 const resErr = (err, res) => {
   res.status(404).json({
@@ -8,16 +8,29 @@ const resErr = (err, res) => {
 }
 const getAllUsers = async (req, res) => {
   try {
-    // /api/v1/users?account=tiff&age[gte]=25
-    // console.log(req.query);   // { account: 'tiff', age: { gte: '25' } }
-    let queryStr = JSON.stringify(req.query);
+    const queryObject = { ...req.query };
+    const excludedFields = ['sort'];
+    excludedFields.forEach(el => delete queryObject[el]);
+
+    // 1. Filtering
+    let queryStr = JSON.stringify(queryObject);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-    
-    const user = await userModel.find(JSON.parse(queryStr));
+    let query = User.find(JSON.parse(queryStr));
+
+    // 2. Sorting
+    if (req.query.sort) {
+      const sortByStr = req.query.sort.replace(',', ' ');
+      query = query.sort(sortByStr);
+    } else {
+      query = query.sort('-createAt');
+    }
+
+    const users = await query;
+
     res.status(200).json({
       status: 'success',
       data: {
-        user,
+        users,
       }
     });
   } catch (err) {
@@ -26,7 +39,7 @@ const getAllUsers = async (req, res) => {
 };
 const getUserById = async (req, res) => {
   try {
-    const user = await userModel.findById(req.params.id);
+    const user = await User.findById(req.params.id);
     res.status(200).json({
       status: 'success',
       data: {
@@ -39,7 +52,7 @@ const getUserById = async (req, res) => {
 };
 const createUser = async (req, res) => {
   try {
-    const newUser = await userModel.create(req.body);
+    const newUser = await User.create(req.body);
     res.status(201).json({
       status: 'success',
       data: {
@@ -52,7 +65,7 @@ const createUser = async (req, res) => {
 };
 const updateUserById = async (req, res) => {
   try {
-    const user = await userModel.findByIdAndUpdate(req.params.id, req.body, {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
     });
@@ -68,7 +81,7 @@ const updateUserById = async (req, res) => {
 };
 const deleteUserById = async (req, res) => {
   try {
-    await userModel.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: 'success',
       data: null
