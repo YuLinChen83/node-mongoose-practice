@@ -20,6 +20,8 @@ const userSchema = new Schema({
   age: Number,
   description: String,
   birthday: Date,
+  part: String,
+  team: String,
   createdAt: {
     type: Date,
     default: Date.now(),

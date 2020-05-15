@@ -1,11 +1,11 @@
 const path = require('path');
 const serverConfig = {
-  entry: "./src/server.js",
+  entry: "./index.js",
   target: 'node',
   devtool: "cheap-module-source-map",
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'lib.node.js',
+    filename: 'bundle.js',
     libraryTarget: "commonjs2"
   },
   module: {

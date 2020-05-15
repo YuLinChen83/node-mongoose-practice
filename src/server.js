@@ -1,10 +1,6 @@
 import mongoose from 'mongoose';
 import app from './app';
 
-const dotenv = require('dotenv');
-
-dotenv.config({ path: './config.env' });
-
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
@@ -18,6 +14,7 @@ mongoose
   })
   .then(() => console.log('DB connection successful!'))
   .catch(err => {
+    console.log(DB);
     console.log(`DB connection error: ${ err.message }`);
   });
 

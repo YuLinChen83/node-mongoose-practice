@@ -1,7 +1,7 @@
 import fs from 'fs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import User from './../models/userModel';
+import User from './../src/models/userModel';
 
 dotenv.config({ path: './config.env' });
 
@@ -14,6 +14,7 @@ mongoose
   .connect(DB, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
+    useCreateIndex: true,
   })
   .then(() => console.log('DB connection successful!'))
   .catch(err => {
