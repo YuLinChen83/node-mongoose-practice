@@ -1,7 +1,7 @@
 import fs from 'fs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import User from './../src/models/userModel';
+import Tour from './../src/models/tourModel';
 
 dotenv.config({ path: './config.env' });
 
@@ -23,10 +23,11 @@ mongoose
 
 const importData = async () => {
   try {
-    const users = JSON.parse(
-      fs.readFileSync(`${__dirname}/init-users.json`, 'utf-8')
+    const tours = JSON.parse(
+      fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
     );
-    await User.create(users);
+    console.log(tours);
+    await Tour.create(tours);
     console.log('Data successfully loaded!');
   } catch (err) {
     console.log(err);
@@ -36,7 +37,7 @@ const importData = async () => {
 
 const deleteData = async () => {
   try {
-    await User.deleteMany();
+    await Tour.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);

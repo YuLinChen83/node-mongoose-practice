@@ -1,34 +1,105 @@
-import { Schema, model } from 'mongoose';
+import crypto from 'crypto';
+import mongoose from 'mongoose';
+import validator from 'validator';
+import bcrypt from 'bcryptjs';
 
-const userSchema = new Schema({
-  account: {
+const userSchema = new mongoose.Schema({
+  name: {
     type: String,
+    required: [true, 'Please tell us your name!']
+  },
+  email: {
+    type: String,
+    required: [true, 'Please provide your email'],
     unique: true,
-    required: true,
-    maxlength: [20, '帳號最多20個字'],
-    minlength: [5, '帳號最少5個字']
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a valid email']
+  },
+  photo: String,
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user'
   },
   password: {
     type: String,
-    required: true,
+    required: [true, 'Please provide a password'],
+    minlength: 8,
     select: false
   },
-  name: {
+  passwordConfirm: {
     type: String,
-    required: true,
+    required: [true, 'Please confirm your password'],
+    validate: {
+      // This only works on CREATE and SAVE!!!
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: 'Passwords are not the same!'
+    }
   },
-  age: Number,
-  description: String,
-  birthday: Date,
-  part: String,
-  team: String,
-  createdAt: {
-    type: Date,
-    default: Date.now(),
+  passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
     select: false
-  },
+  }
 });
 
-const User = model('User', userSchema);
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();  // 只有在 password 修改時才執行
+
+  this.password = await bcrypt.hash(this.password, 12);   // 用長度12的salt去hash
+  this.passwordConfirm = undefined;
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+userSchema.pre(/^find/, function (next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } });
+  next();
+});
+
+userSchema.methods.correctPassword = async (
+  candidatePassword,
+  userPassword
+) => {
+  console.log(candidatePassword, userPassword)
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False means NOT changed
+  return false;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  console.log({ resetToken }, this.passwordResetToken);
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
+
+const User = mongoose.model('User', userSchema);
 
 export default User;
