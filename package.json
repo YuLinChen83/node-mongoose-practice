@@ -4,7 +4,7 @@
   "description": "Learning node, express and mongoDB",
   "scripts": {
     "start": "node dist/bundle.js",
-    "start:dev": "node index.js",
+    "start:dev": "nodemon index.js",
     "build": "rm -rf dist/* && NODE_ENV=development webpack",
     "init-data": "node dev-data/index.js  --import",
     "delete-data": "node dev-data/index.js  --delete"

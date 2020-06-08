@@ -1,0 +1,117 @@
+[
+  {
+    "name": "諾曼",
+    "enName": "Norman",
+    "birthday": "2034/3/21",
+    "email": "norman22194@island.com",
+    "role": "admin",
+    "password": "password",
+    "passwordConfirm": "password",
+    "takeOfficeDate": "2046/3/21"
+  },
+  {
+    "role": "user",
+    "name": "雷",
+    "enName": "Ray",
+    "birthday": "2034-01-14",
+    "email": "ray@island.com",
+    "password": "12345678",
+    "passwordConfirm": "12345678",
+    "takeOfficeDate": "2046-03-20"
+  },
+  {
+    "role": "admin",
+    "name": "艾瑪",
+    "enName": "Emma",
+    "birthday": "2034-08-22",
+    "email": "emma@island.com",
+    "password": "12345678",
+    "passwordConfirm": "12345678",
+    "takeOfficeDate": "2046-03-20"
+  },
+  {
+    "role": "user",
+    "name": "菲爾",
+    "enName": "Phil",
+    "birthday": "2040-08-22",
+    "email": "phil@island.com",
+    "password": "12345678",
+    "passwordConfirm": "12345678",
+    "takeOfficeDate": "2046-03-20"
+  },
+  {
+    "hrId": "5edddbad7874bb75cb1f2b90",
+    "name": "吉爾妲",
+    "enName": "Gilda",
+    "birthday": "2035-01-01",
+    "email": "gilda@island.com",
+    "cellphoneNumber": "0910123456",
+    "telephoneNumber": "02-2771-0000",
+    "educationList": [
+      {
+        "school": "台灣大學",
+        "department": "資訊工程學系",
+        "status": "畢業"
+      }
+    ],
+    "schoolClubsExperiences": [
+      {
+        "club": "文藝社",
+        "description": "教學"
+      }
+    ],
+    "yearsOfWorkingExperience": 0.5,
+    "team": "PM",
+    "jobTitle": "專案管理師主管",
+    "recentWorkingExperiences": [],
+    "interviewDate": "2020-06-06",
+    "takeOfficeDate": "2020-07-01",
+    "mark": "斯文眼鏡妹",
+    "firstDeliveredPlatform": "104"
+  },
+  {
+    "hrId": "5edddbad7874bb75cb1f2b90",
+    "name": "唐",
+    "enName": "Don",
+    "birthday": "2035-01-01",
+    "email": "don@island.com",
+    "cellphoneNumber": "0910123456",
+    "telephoneNumber": "02-2771-0000",
+    "educationList": [
+      {
+        "school": "清華大學",
+        "department": "土木工程學系",
+        "status": "畢業"
+      }
+    ],
+    "schoolClubsExperiences": [
+      {
+        "club": "田徑社",
+        "description": "金牌"
+      }
+    ],
+    "yearsOfWorkingExperience": 0.5,
+    "team": "GO",
+    "jobTitle": "senior golang",
+    "recentWorkingExperiences": [
+      {
+        "company": "鴻海",
+        "jobTitle": "後端工程師",
+        "startDate": "2020-03-15",
+        "endDate": "2020-05-31",
+        "description": "PHP, Redis..."
+      },
+      {
+        "company": "Uber",
+        "jobTitle": "外送員",
+        "startDate": "2020-01-01",
+        "endDate": "2020-02-31",
+        "description": "打零工"
+      }
+    ],
+    "interviewDate": "2020-06-06",
+    "takeOfficeDate": "2020-07-01",
+    "mark": "鄰家大哥哥",
+    "firstDeliveredPlatform": "104"
+  }
+]

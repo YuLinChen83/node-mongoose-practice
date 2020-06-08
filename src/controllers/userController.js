@@ -1,44 +1,55 @@
 import User from './../models/userModel';
 import catchAsync from './../utils/catchAsync';
 import AppError from './../utils/appError';
-
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach(el => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
+import filterObj from './../utils/filterObj';
 
 const getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+  let query = User.find().sort('-takeOfficeDate');
+  const users = await query;
 
-  // SEND RESPONSE
   res.status(200).json({
     status: 'success',
-    results: users.length,
+    count: users.length,
     data: {
       users
     }
   });
 });
 
-const updateMe = catchAsync(async (req, res, next) => {
-  // 1) Create error if user POSTs password data
+const createUser = catchAsync(async (req, res, next) => {
+  const newUser = await User.create(req.body);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: newUser,
+    }
+  });
+});
+
+const getUser = catchAsync(async (req, res, next) => {
+  const users = await User.find({ email: req.bodyemail });
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      users
+    }
+  });
+});
+
+const updateUserById = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
-        'This route is not for password updates. Please use /updateMyPassword.',
+        '變更密碼請使用 API /updateMyPassword.',
         400
       )
     );
   }
 
-  // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, 'name', 'email');
-
-  // 3) Update user document
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+  const filteredBody = filterObj(req.body, 'name', 'email', 'photo', 'role', 'team', 'takeOfficeDate');
+  const user = await User.findByIdAndUpdate(req.params.id, filteredBody, {
     new: true,
     runValidators: true
   });
@@ -46,13 +57,13 @@ const updateMe = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      user: updatedUser
+      user,
     }
   });
 });
 
-const deleteMe = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false });
+const deleteUserById = catchAsync(async (req, res, next) => {
+  await User.findByIdAndDelete(req.params.id);
 
   res.status(204).json({
     status: 'success',
@@ -60,37 +71,10 @@ const deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-const getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-const createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!'
-  });
-};
-
 export default {
   getAllUsers,
-  updateMe,
-  deleteMe,
-  getUser,
   createUser,
-  updateUser,
-  deleteUser,
+  getUser,
+  updateUserById,
+  deleteUserById,
 }

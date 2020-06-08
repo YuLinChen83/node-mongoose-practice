@@ -5,10 +5,10 @@ import morgan from 'morgan';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
-import userRouter from './routes/userRoutes';
-import tourRouter from './routes/tourRoutes';
 import AppError from './utils/appError';
 import globalErrorHandler from './controllers/errorController';
+import userRouter from './routes/userRoutes';
+import candidateRouter from './routes/candidateRoutes';
 
 const app = express();
 
@@ -40,19 +40,12 @@ app.use(xss());
 // Prevent parameter pollution
 app.use(
   hpp({
-    whitelist: [
-      'duration',
-      'ratingsQuantity',
-      'ratingsAverage',
-      'maxGroupSize',
-      'difficulty',
-      'price'
-    ]
+    whitelist: []
   })
 );
 
-app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/candidates', candidateRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
